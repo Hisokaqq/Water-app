@@ -3,9 +3,14 @@ import React from 'react'
 import { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { timeDet } from '../components/functions'
+import AsyncStorage  from '@react-native-async-storage/async-storage'
+import { useSelector } from 'react-redux'
+import { selectSinglas } from '../slices/singular'
 
 const HomeScreen = () => {
   const navigation = useNavigation()
+  const singulars = useSelector(selectSinglas)
+  console.log(singulars)
 
   
 
@@ -20,9 +25,6 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    // <View   className="bg-[#222222] flex-1 ">
-      
-    // </View>
     <View style={styles.container}>
   <ImageBackground
     source={require("../images/ee3.png")}
@@ -59,7 +61,7 @@ const HomeScreen = () => {
           <Text className="text-white">streak</Text>
         </View>
         <View className="p-4 items-center space-y-2 rounded-lg mt-2" style={{backgroundColor: "rgba(32,32,32,0.8)"}}>
-          <Text className="text-white text-lg font-bold">0d</Text>
+          <Text className="text-white text-lg font-bold">0</Text>
           <Text className="text-white">Minutes</Text>
           <Text className="text-white">Lasted</Text>
         </View>
@@ -69,7 +71,7 @@ const HomeScreen = () => {
           <Text className="text-white">streak</Text>
         </View>
         <View className="p-4 items-center space-y-2 rounded-lg mt-2" style={{backgroundColor: "rgba(32,32,32,0.8)"}}>
-          <Text className="text-white text-lg font-bold">0d</Text>
+          <Text className="text-white text-lg font-bold">0</Text>
           <Text className="text-white">Sessions</Text>
           <Text className="text-white">Listened</Text>
         </View>

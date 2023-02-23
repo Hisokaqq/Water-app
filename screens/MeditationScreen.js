@@ -21,6 +21,7 @@ const MeditationScreen = ({route, navigation}) => {
 
     useEffect(() => {
         let interval;
+        console.log(minutes)
         if (!paused) {
             interval = setInterval(() => {
                 setRemainingTime(prevTime => prevTime - 1);
