@@ -7,8 +7,8 @@ import { useState } from 'react'
 
 const DailyScreen = () => {
   const navigation = useNavigation()
-  const [selected, setSelected] = useState(0)
-  
+  const [selected, setSelected] = useState(null)
+  const [time, setTime] = useState(null)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,9 +35,11 @@ const DailyScreen = () => {
     </View>
     <View style={{flex:1}}>
     <View style={{height:115}}>
-    <ScrollView showsHorizontalScrollIndicator={false}  horizontal className="m-3 mt-10 rounded-lg  flex-row  space-x-2 overflow-hidden py-2" style={{backgroundColor: "#4a4a4a", height:"80%"}}>
+    <ScrollView showsHorizontalScrollIndicator={false}  horizontal className="m-3 mt-10 rounded-lg  flex-row  space-x-2  p-2" style={{backgroundColor: "#4a4a4a", height:"80%"}}>
         {[3,5,8,10,12,15,20, 25, 30, 40, 50, 60].map((n, index)=>(
-            <TouchableOpacity  onPress={()=>setSelected(index)} style={{ backgroundColor: index==selected ? "white" : "rgba(32,32,32,0.5)"}} className="p-4 rounded-lg">
+            <TouchableOpacity  key={index} onPress={()=>{setSelected(index)
+              setTime(n)
+            }} style={{ backgroundColor: index==selected ? "white" : "rgba(32,32,32,0.5)"}} className="p-4 rounded-lg">
                 <Text className={`${index==selected ? "text-black" : "text-white "} font-bold` } >{n}min</Text>
             </TouchableOpacity>
         ))}
@@ -45,7 +47,7 @@ const DailyScreen = () => {
     </ScrollView>
     </View>
     </View>
-    <TouchableOpacity className="px-20 py-7 rounded-full m-auto bg-white">
+    <TouchableOpacity disabled={!time} onPress={() => navigation.navigate("Meditation", {time:time})} className="px-20 py-7 rounded-full m-auto bg-white">
             <Text>Start</Text>
     </TouchableOpacity>
   </SafeAreaView>
