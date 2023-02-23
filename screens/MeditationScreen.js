@@ -1,11 +1,14 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { useLayoutEffect } from 'react';
+import { Audio } from 'expo-av';
 
 const MeditationScreen = ({route, navigation}) => {
     const { time } = route.params;
     const [paused, setPaused] = useState(false);
     const [remainingTime, setRemainingTime] = useState(time * 60);
+    const [sound, setSound] = useState(null);
+    
     useLayoutEffect(() => {
         navigation.setOptions({
           title: "Daily Meditation",
@@ -14,7 +17,8 @@ const MeditationScreen = ({route, navigation}) => {
           },
           headerTransparent: true,
         });
-      }, []);
+    }, []);
+
     useEffect(() => {
         let interval;
         if (!paused) {
@@ -24,6 +28,7 @@ const MeditationScreen = ({route, navigation}) => {
         }
         if (remainingTime === 0) {
             clearInterval(interval);
+            playSound();
         }
 
         return () => clearInterval(interval);
@@ -35,6 +40,18 @@ const MeditationScreen = ({route, navigation}) => {
     const handlePress = () => {
         setPaused(!paused);
     };
+
+    const playSound = async () => {
+        try {
+            const { sound } = await Audio.Sound.createAsync(
+                require('../images/alarm.mp3')
+            );
+            setSound(sound);
+            await sound.playAsync();
+        } catch (error) {
+            console.log('Error playing sound: ', error);
+        }
+    }
 
     return (
         <View className={`flex-1 justify-center items-center ${ paused ? "bg-[#5b5b5b]" : "bg-[#222222]"}`}>
