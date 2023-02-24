@@ -7,6 +7,8 @@ import OnBoardScreen from './screens/OnBoardScreen';
 import DailyScreen from './screens/DailyScreen';
 import MeditationScreen from './screens/MeditationScreen';
 const Stack = createNativeStackNavigator();
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackgroundTask from 'react-native-background-task';
 
 const globalScreenOptions = {
   headerStyle: {
@@ -19,7 +21,26 @@ const globalScreenOptions = {
 }
 import store from './store';
 import { Provider } from 'react-redux'
+import { useEffect } from 'react';
 export default function App() {
+  useEffect(() => {
+    async function checkIfFirstTime() {
+      try {
+        const value = await AsyncStorage.getItem('ml');
+        if (value === null) {
+          await AsyncStorage.setItem('ml', '0');
+        await AsyncStorage.setItem('cs', '0');
+        await AsyncStorage.setItem('ls', '0');
+        await AsyncStorage.setItem('sl', '0');
+
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    checkIfFirstTime();
+  }, []);
+  
   return (
     <Provider store={store}>
       <NavigationContainer>
