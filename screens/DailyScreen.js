@@ -4,12 +4,23 @@ import { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { timeDet } from '../components/functions'
 import { useState } from 'react'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const DailyScreen = () => {
   const navigation = useNavigation()
   const [selected, setSelected] = useState(null)
   const [time, setTime] = useState(null)
 
+  async function getSLValue() {
+    try {
+      const value = await AsyncStorage.getItem('sl');
+      await AsyncStorage.setItem('sl', (parseInt(value) + 1).toString());
+      
+    } catch (error) {
+      console.log(error);
+    }
+    navigation.navigate("Meditation", {time:time})
+  }
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Daily Meditation",
@@ -47,7 +58,8 @@ const DailyScreen = () => {
     </ScrollView>
     </View>
     </View>
-    <TouchableOpacity disabled={!time} onPress={() => navigation.navigate("Meditation", {time:time})} className="px-20 py-7 rounded-full m-auto bg-white">
+    <TouchableOpacity disabled={!time} 
+    onPress={getSLValue} className={`px-20 py-7 rounded-full m-auto ${selected!=null ? "bg-white" : "bg-gray-400" }`}>
             <Text>Start</Text>
     </TouchableOpacity>
   </SafeAreaView>

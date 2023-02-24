@@ -32,10 +32,11 @@ const MeditationScreen = ({route, navigation}) => {
         async function getMLValue() {
             try {
               const value = await AsyncStorage.getItem('ml');
+              
               if (value !== null) {
+                // await AsyncStorage.setItem('ml', (parseInt(value) + 1).toString());
                 await AsyncStorage.setItem('ml', (parseInt(value) + 1).toString());
                 setMlValue(value);
-                console.log(mlValue)
               }
             } catch (error) {
               console.log(error);
@@ -74,7 +75,7 @@ const MeditationScreen = ({route, navigation}) => {
             setSound(sound);
             await sound.playAsync();
         } catch (error) {
-            console.log('Error playing sound: ', error);
+            console.log('Error playing sound: ', error);    
         }
     }
 
