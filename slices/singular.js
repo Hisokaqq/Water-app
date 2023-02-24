@@ -12,7 +12,7 @@ export const singularsSlice = createSlice({
 
     },
     reducers: {
-        increment: state => {
+        increment_ml: state => {
             state.ml += 1
         },
 
@@ -23,7 +23,7 @@ export const selectSinglas = state => state.singulars
 
 
 export const {
-    increment,
+    increment_ml,
 } = singularsSlice.actions
 
 

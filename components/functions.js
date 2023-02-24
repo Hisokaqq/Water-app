@@ -39,3 +39,8 @@ checkNewDay.lastYear = new Date().getFullYear();
 
 // call the function every 24 hours (in milliseconds)
 setInterval(checkNewDay, 24 * 60 * 60 * 1000);
+
+
+export function secondsToMinutes(seconds) {
+    return Math.floor(seconds / 60)
+}

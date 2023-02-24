@@ -2,12 +2,20 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useLayoutEffect } from 'react';
 import { Audio } from 'expo-av';
+import { useDispatch } from 'react-redux';
+import { increment_ml } from '../slices/singular';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MeditationScreen = ({route, navigation}) => {
+    const dispatch = useDispatch()
     const { time } = route.params;
     const [paused, setPaused] = useState(false);
     const [remainingTime, setRemainingTime] = useState(time * 60);
     const [sound, setSound] = useState(null);
+    const [mlValue, setMlValue] = useState(null);
+    useEffect(() => {
+        
+      }, []);
     
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -21,9 +29,24 @@ const MeditationScreen = ({route, navigation}) => {
 
     useEffect(() => {
         let interval;
-        console.log(minutes)
+        async function getMLValue() {
+            try {
+              const value = await AsyncStorage.getItem('ml');
+              if (value !== null) {
+                await AsyncStorage.setItem('ml', (parseInt(value) + 1).toString());
+                setMlValue(value);
+                console.log(mlValue)
+              }
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          getMLValue();
         if (!paused) {
+            dispatch(increment_ml())
+        
             interval = setInterval(() => {
+                
                 setRemainingTime(prevTime => prevTime - 1);
             }, 1000);
         }
@@ -35,6 +58,7 @@ const MeditationScreen = ({route, navigation}) => {
         return () => clearInterval(interval);
     }, [paused, remainingTime]);
 
+    
     const minutes = Math.floor(remainingTime / 60);
     const seconds = remainingTime % 60;
 

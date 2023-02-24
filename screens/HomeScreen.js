@@ -1,8 +1,8 @@
 import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView, ImageBackground, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { timeDet } from '../components/functions'
+import { secondsToMinutes, timeDet } from '../components/functions'
 import AsyncStorage  from '@react-native-async-storage/async-storage'
 import { useSelector } from 'react-redux'
 import { selectSinglas } from '../slices/singular'
@@ -10,8 +10,21 @@ import { selectSinglas } from '../slices/singular'
 const HomeScreen = () => {
   const navigation = useNavigation()
   const singulars = useSelector(selectSinglas)
-  console.log(singulars)
+  const [mlValue, setMlValue] = useState(null);
 
+  useEffect(() => {
+    async function getMLValue() {
+      try {
+        const value = await AsyncStorage.getItem('ml');
+        if (value !== null) {
+          setMlValue(value);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getMLValue();
+  }, []);
   
 
   useLayoutEffect(() => {
@@ -22,7 +35,7 @@ const HomeScreen = () => {
       },
       headerTransparent: true,
     });
-  }, []);
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -61,8 +74,8 @@ const HomeScreen = () => {
           <Text className="text-white">streak</Text>
         </View>
         <View className="p-4 items-center space-y-2 rounded-lg mt-2" style={{backgroundColor: "rgba(32,32,32,0.8)"}}>
-          <Text className="text-white text-lg font-bold">0</Text>
-          <Text className="text-white">Minutes</Text>
+          <Text className="text-white text-lg font-bold">{secondsToMinutes(mlValue)}</Text>
+          <Text className="text-white"> Minutes</Text>
           <Text className="text-white">Lasted</Text>
         </View>
         <View className="p-4 items-center space-y-2 rounded-lg mt-2" style={{backgroundColor: "rgba(32,32,32,0.8)"}}>
@@ -83,6 +96,8 @@ const HomeScreen = () => {
 
   )
 }
+
+
 
 const styles =  StyleSheet.create({
   container:{
